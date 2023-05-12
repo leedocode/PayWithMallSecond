@@ -35,7 +35,7 @@ public class PayService implements IPayService {
         payRequest.setOrderId(orderId);
         payRequest.setOrderName("微信公众账号支付订单");
         payRequest.setOrderAmount(amount.doubleValue());
-        wxPayConfig.setNotifyUrl("http://xxxxx");
+        wxPayConfig.setNotifyUrl("http://mall-second.natapp1.cc/pay/notify"); //微信支付通知地址，支付成功后将会通过这个地址返回相应通知信息
         PayResponse response = bestPayService.pay(payRequest);
         log.info("response = {}", response);
         return response;
