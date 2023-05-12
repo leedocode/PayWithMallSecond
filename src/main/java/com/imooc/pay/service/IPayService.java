@@ -8,4 +8,6 @@ public interface IPayService {
 
     //发起支付
     PayResponse create(String orderId, BigDecimal amount);
+
+    String asyncNotify(String notifyData);
 }
