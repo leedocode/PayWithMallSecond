@@ -1,6 +1,7 @@
 package com.imooc.pay.controller;
 
 import com.imooc.pay.service.impl.PayService;
+import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,16 @@ public class PayController {
     PayService payService;
 
     @GetMapping("/create")
-    public ModelAndView create(@RequestParam("orderId") String orderId, @RequestParam("amount") BigDecimal amount) {
-        PayResponse payResponse = payService.create(orderId, amount);
+    public ModelAndView create(@RequestParam("orderId") String orderId, @RequestParam("amount") BigDecimal amount, @RequestParam("payType")BestPayTypeEnum bestPayTypeEnum) {
+        PayResponse payResponse = payService.create(orderId, amount, bestPayTypeEnum);
         Map map = new HashMap();
-        map.put("codeUrl", payResponse.getCodeUrl());
-        return new ModelAndView("create", map);
+        String viewName = "";
+        if (bestPayTypeEnum == BestPayTypeEnum.WXPAY_NATIVE) {
+            map.put("codeUrl", payResponse.getCodeUrl());
+            viewName = "createForWxNative";
+        }
+        return new ModelAndView(viewName, map);
+
     }
 
     @PostMapping("/notify")
@@ -37,4 +43,5 @@ public class PayController {
     public String asyncNotify(@RequestBody String notifyData) {
         return payService.asyncNotify(notifyData);
     }
+
 }
